@@ -1,42 +1,56 @@
----
-layout: page
-description: "一杯敬朝阳 一杯敬月光"
----
-
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {{ post.content | strip_html | truncate:200 }}
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<title>Zayia-我的个人网站</title>
+<meta charset="utf-8">
+<meta name="baidu-site-verification" content="b9lOcChmbf">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<link rel="shortcut icon" href="http://www.z5wl.com/wp-content/uploads/2017/03/3.png" /><!-- 图标-->
+<link rel="stylesheet" href="css/main.css">
+<noscript>
+<link rel="stylesheet" href="css/noscript.css"/>
+</noscript>
+</head>
+<body>
+<div id="wrapper">
+	<header id="header">
+	<div class="logo">
+		<img src="http://www.z5wl.com/wp-content/uploads/2017/03/头像3.gif" class="logo"><!-- 这里是头像-->
+	</div>
+	<div class="content">
+		<div class="inner">
+			<h1>Zayia</h1><!-- 这就不用多说了吧？-->
+			<p>我的个人主页<br><!-- 这就不用多说了吧？-->
+			</p>
+		</div>
+	</div>
+	<nav>
+		<script type="text/javascript">
+			function duihua()
+			{
+			alert("Zayia")
+			}
+		</script>
+	<ul>
+		<li><a href=" http://www.z5wl.com/" target="_blank"> 博客</a></li><!-- 按钮1-->
+		<li><a href="javascript:void(0);" onclick="duihua()">待添加</a></li><!-- 按钮2-->
+		<li><a href="http://zayia.cn/tc" target="_blank">图床</a></li><!-- 按钮3-->
+		<li><a href="http://zayia.cn/yf" target="_blank">赞助</a></li><!-- 按钮4-->
+	</ul>
+	</nav></header>
+	<footer id="footer">
+	<p class="copyright">© 2017-2018.</p><!-- 版权-->
+	</footer>
 </div>
-<hr>
-{% endfor %}
-
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+<div id="bg">
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/skel.min.js"></script>
+<script src="js/util.js"></script>
+<script src="js/main.js"></script>
+<script type="text/javascript">document.oncontextmenu=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.onpaste=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.oncopy=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.oncut=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.onselectstart=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}};</script>
+<audio autoplay>
+<source src="https://music.163.com/song/media/outer/url?id=461347998.mp3" type="audio/mpeg"><!-- ！BGM！-->
+</audio>
+</body>
+</html>
