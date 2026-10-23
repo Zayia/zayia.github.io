@@ -1,56 +1,390 @@
-﻿<!DOCTYPE HTML>
-<html>
-<head>
-<title>Zayia-我的个人网站</title>
-<meta charset="utf-8">
-<meta name="baidu-site-verification" content="b9lOcChmbf">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<link rel="shortcut icon" href="http://www.z5wl.com/wp-content/uploads/2017/03/3.png" /><!-- 图标-->
-<link rel="stylesheet" href="css/main.css">
-<noscript>
-<link rel="stylesheet" href="css/noscript.css"/>
-</noscript>
-</head>
-<body>
-<div id="wrapper">
-	<header id="header">
-	<div class="logo">
-		<img src="http://www.z5wl.com/wp-content/uploads/2017/03/头像3.gif" class="logo"><!-- 这里是头像-->
-	</div>
-	<div class="content">
-		<div class="inner">
-			<h1>Zayia</h1><!-- 这就不用多说了吧？-->
-			<p>我的个人主页<br><!-- 这就不用多说了吧？-->
-			</p>
-		</div>
-	</div>
-	<nav>
-		<script type="text/javascript">
-			function duihua()
-			{
-			alert("Zayia")
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Zayia · 后端工程师 / 全栈</title>
+		<meta name="description" content="Zayia 的个人主页：后端与全栈开发，Swift / TypeScript / Java，做过 IOTA 生态工具与自托管的个人数据服务。" />
+		<meta name="color-scheme" content="dark light" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Zayia · 后端工程师 / 全栈" />
+		<meta property="og:description" content="写后端，也写客户端；喜欢把东西真正跑起来。" />
+		<meta property="og:image" content="https://zayia.github.io/images/avatar.jpg" />
+		<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f1117'/%3E%3Ctext x='50' y='68' font-family='system-ui,sans-serif' font-size='54' font-weight='600' fill='%237dd3fc' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+		<style>
+			:root {
+				--bg: #0d0f14;
+				--bg-soft: #141821;
+				--card: #161b25;
+				--card-hover: #1c2230;
+				--line: #232a38;
+				--text: #e6e9ef;
+				--muted: #9aa3b2;
+				--accent: #7dd3fc;
+				--accent-soft: rgba(125, 211, 252, 0.12);
+				--radius: 14px;
+				--maxw: 960px;
 			}
+			@media (prefers-color-scheme: light) {
+				:root {
+					--bg: #f7f8fa;
+					--bg-soft: #ffffff;
+					--card: #ffffff;
+					--card-hover: #ffffff;
+					--line: #e3e6ec;
+					--text: #1b1f27;
+					--muted: #5c6573;
+					--accent: #0369a1;
+					--accent-soft: rgba(3, 105, 161, 0.08);
+				}
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+			html {
+				-webkit-text-size-adjust: 100%;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--text);
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+				line-height: 1.7;
+				font-size: 16px;
+				-webkit-font-smoothing: antialiased;
+			}
+			a {
+				color: var(--accent);
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			.wrap {
+				max-width: var(--maxw);
+				margin: 0 auto;
+				padding: 0 24px;
+			}
+
+			/* 顶部 */
+			header.hero {
+				padding: 88px 0 56px;
+				border-bottom: 1px solid var(--line);
+				background: radial-gradient(900px 380px at 18% -10%, var(--accent-soft), transparent 70%);
+			}
+			.hero-inner {
+				display: flex;
+				gap: 28px;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+			.avatar {
+				width: 96px;
+				height: 96px;
+				border-radius: 50%;
+				object-fit: cover;
+				border: 2px solid var(--line);
+				background: var(--bg-soft);
+				flex: 0 0 auto;
+			}
+			.hero h1 {
+				margin: 0;
+				font-size: 2.1rem;
+				letter-spacing: -0.02em;
+				line-height: 1.25;
+			}
+			.hero .role {
+				margin: 6px 0 0;
+				color: var(--accent);
+				font-size: 0.95rem;
+				letter-spacing: 0.04em;
+			}
+			.hero .bio {
+				margin: 14px 0 0;
+				color: var(--muted);
+				max-width: 46em;
+			}
+			.links {
+				margin: 22px 0 0;
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+				padding: 0;
+				list-style: none;
+			}
+			.links a {
+				display: inline-block;
+				padding: 7px 14px;
+				border: 1px solid var(--line);
+				border-radius: 999px;
+				color: var(--text);
+				font-size: 0.9rem;
+				transition: border-color 0.18s ease, background 0.18s ease;
+			}
+			.links a:hover {
+				border-color: var(--accent);
+				background: var(--accent-soft);
+				text-decoration: none;
+			}
+
+			/* 区块 */
+			section {
+				padding: 56px 0;
+				border-bottom: 1px solid var(--line);
+			}
+			section:last-of-type {
+				border-bottom: 0;
+			}
+			h2 {
+				margin: 0 0 22px;
+				font-size: 0.82rem;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				color: var(--muted);
+				font-weight: 600;
+			}
+
+			/* 项目卡片 */
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+				gap: 14px;
+			}
+			.card {
+				display: block;
+				padding: 18px 18px 16px;
+				background: var(--card);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				color: inherit;
+				transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+			}
+			.card:hover {
+				transform: translateY(-2px);
+				border-color: var(--accent);
+				background: var(--card-hover);
+				text-decoration: none;
+			}
+			.card h3 {
+				margin: 0 0 6px;
+				font-size: 1rem;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.card h3 span.dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: var(--accent);
+				opacity: 0.85;
+				flex: 0 0 auto;
+			}
+			.card p {
+				margin: 0;
+				color: var(--muted);
+				font-size: 0.9rem;
+			}
+			.card .meta {
+				margin-top: 12px;
+				font-size: 0.78rem;
+				color: var(--muted);
+				letter-spacing: 0.02em;
+			}
+
+			/* 技术栈 */
+			.chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			.chips li {
+				font-size: 0.85rem;
+				padding: 5px 12px;
+				border-radius: 999px;
+				background: var(--bg-soft);
+				border: 1px solid var(--line);
+				color: var(--muted);
+			}
+
+			/* 时间线 */
+			.timeline {
+				margin: 0;
+				padding: 0 0 0 18px;
+				list-style: none;
+				border-left: 1px solid var(--line);
+			}
+			.timeline li {
+				position: relative;
+				padding: 0 0 18px 6px;
+			}
+			.timeline li:last-child {
+				padding-bottom: 0;
+			}
+			.timeline li::before {
+				content: "";
+				position: absolute;
+				left: -23px;
+				top: 10px;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: var(--bg);
+				border: 2px solid var(--accent);
+			}
+			.timeline .when {
+				font-size: 0.8rem;
+				color: var(--muted);
+				letter-spacing: 0.03em;
+			}
+			.timeline .what {
+				margin: 2px 0 0;
+			}
+
+			footer {
+				padding: 36px 0 48px;
+				color: var(--muted);
+				font-size: 0.85rem;
+			}
+			footer .wrap {
+				display: flex;
+				justify-content: space-between;
+				gap: 16px;
+				flex-wrap: wrap;
+			}
+
+			@media (max-width: 560px) {
+				header.hero {
+					padding: 56px 0 40px;
+				}
+				.hero h1 {
+					font-size: 1.7rem;
+				}
+				section {
+					padding: 40px 0;
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				* {
+					transition: none !important;
+					animation: none !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header class="hero">
+			<div class="wrap hero-inner">
+				<img class="avatar" src="images/avatar.jpg" width="96" height="96" alt="Zayia 的头像" />
+				<div>
+					<h1>Zayia</h1>
+					<p class="role">后端工程师 · 全栈 · 偶尔写客户端</p>
+					<p class="bio">
+						平时写 Java / Go / TypeScript 的服务端，也做 Swift 和前端。喜欢把东西从零做到能真正跑起来——
+						小到一台手机上的自签 App，大到一套自托管的个人数据服务。早年沉迷 IOTA 生态，现在更关注
+						「一个人也能维护」的工程实践。
+					</p>
+					<ul class="links">
+						<li><a href="https://github.com/Zayia" target="_blank" rel="noopener">GitHub</a></li>
+						<li><a href="https://github.com/Zayia?tab=repositories" target="_blank" rel="noopener">全部项目</a></li>
+						<li><a href="projects.html">无名杀 iOS 版</a></li>
+					</ul>
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<section>
+				<div class="wrap">
+					<h2>精选项目</h2>
+					<div class="grid">
+						<a class="card" href="projects.html">
+							<h3><span class="dot"></span>noname-ios</h3>
+							<p>《无名杀》的 iOS 原生客户端：WKWebView + 本地 HTTP 服务，产出可自签名的未签名 IPA。</p>
+							<div class="meta">Swift · GitHub Actions 自动构建 → 看详情</div>
+						</a>
+						<a class="card" href="https://github.com/Zayia/personal-hub-server" target="_blank" rel="noopener">
+							<h3><span class="dot"></span>personal-hub-server</h3>
+							<p>把任务、联系人、互动与日程收进一套 API 的自托管个人数据中心。</p>
+							<div class="meta">TypeScript</div>
+						</a>
+						<a class="card" href="https://github.com/Zayia/personal-hub-ios" target="_blank" rel="noopener">
+							<h3><span class="dot"></span>personal-hub-ios</h3>
+							<p>Personal Hub 的 SwiftUI 客户端，直接由 OpenAPI 契约生成，保证接口与类型同步。</p>
+							<div class="meta">Swift · SwiftUI</div>
+						</a>
+						<a class="card" href="https://github.com/Zayia/task-dashboard" target="_blank" rel="noopener">
+							<h3><span class="dot"></span>task-dashboard</h3>
+							<p>以 TODO.md 为唯一数据源的任务看板，不引入额外的数据库和同步逻辑。</p>
+							<div class="meta">Swift</div>
+						</a>
+						<a class="card" href="https://github.com/Zayia/NetTool" target="_blank" rel="noopener">
+							<h3><span class="dot"></span>NetTool</h3>
+							<p>日常排查网络问题的小工具集，浏览器里就能跑。</p>
+							<div class="meta">JavaScript</div>
+						</a>
+						<a class="card" href="https://github.com/Zayia/awesome-IOTA" target="_blank" rel="noopener">
+							<h3><span class="dot"></span>awesome-IOTA</h3>
+							<p>IOTA 生态资源精选；配套还有水龙头、地址生成等一组工具。</p>
+							<div class="meta">Awesome List · IOTA</div>
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2>技术栈</h2>
+					<ul class="chips">
+						<li>Java · Spring</li>
+						<li>Go</li>
+						<li>TypeScript · Node</li>
+						<li>Swift · SwiftUI</li>
+						<li>Vue</li>
+						<li>Docker</li>
+						<li>Linux</li>
+						<li>Cloudflare Workers</li>
+						<li>GitHub Actions</li>
+						<li>IOTA</li>
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2>最近在做什么</h2>
+					<ul class="timeline">
+						<li>
+							<div class="when">2026</div>
+							<p class="what">给《无名杀》做了 iOS 客户端，并把打包流程搬到 GitHub Actions：官方一更新，自动出未签名 IPA。</p>
+						</li>
+						<li>
+							<div class="when">2026</div>
+							<p class="what">搭建 Personal Hub：一套自托管的服务端 API，加一个 SwiftUI 客户端，管理自己的任务、联系人和日程。</p>
+						</li>
+						<li>
+							<div class="when">更早</div>
+							<p class="what">在 IOTA 生态里做过水龙头、地址生成器、工具集和资源列表。</p>
+						</li>
+					</ul>
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<div class="wrap">
+				<span>© <span id="year">2026</span> Zayia</span>
+				<span>静态页面，无追踪、无外部依赖</span>
+			</div>
+		</footer>
+
+		<script>
+			document.getElementById("year").textContent = new Date().getFullYear();
 		</script>
-	<ul>
-		<li><a href=" http://www.z5wl.com/" target="_blank"> 博客</a></li><!-- 按钮1-->
-		<li><a href="javascript:void(0);" onclick="duihua()">待添加</a></li><!-- 按钮2-->
-		<li><a href="http://zayia.cn/tc" target="_blank">图床</a></li><!-- 按钮3-->
-		<li><a href="http://zayia.cn/yf" target="_blank">赞助</a></li><!-- 按钮4-->
-	</ul>
-	</nav></header>
-	<footer id="footer">
-	<p class="copyright">© 2017-2018.</p><!-- 版权-->
-	</footer>
-</div>
-<div id="bg">
-</div>
-<script src="js/jquery.min.js"></script>
-<script src="js/skel.min.js"></script>
-<script src="js/util.js"></script>
-<script src="js/main.js"></script>
-<script type="text/javascript">document.oncontextmenu=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.onpaste=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.oncopy=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.oncut=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}},document.onselectstart=function(t){window.event&&(t=window.event);try{var e=t.srcElement;return"INPUT"==e.tagName&&"text"==e.type.toLowerCase()||"TEXTAREA"==e.tagName?!0:!1}catch(n){return!1}};</script>
-<audio autoplay>
-<source src="https://music.163.com/song/media/outer/url?id=461347998.mp3" type="audio/mpeg"><!-- ！BGM！-->
-</audio>
-</body>
+	</body>
 </html>

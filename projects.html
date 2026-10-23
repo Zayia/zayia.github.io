@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>无名杀 iOS 版 · Zayia</title>
+		<meta name="description" content="《无名杀》的 iOS 原生客户端：WKWebView + 本地 HTTP 服务，产出可自签名的未签名 IPA。官方更新后由 GitHub Actions 自动构建。" />
+		<meta name="color-scheme" content="dark" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="无名杀 iOS 版" />
+		<meta property="og:description" content="在 iPhone / iPad 上玩《无名杀》：未签名 IPA，自己签名安装，官方更新自动构建。" />
+		<meta property="og:image" content="https://zayia.github.io/images/noname-ios.jpg" />
+		<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b1f22'/%3E%3Ctext x='50' y='68' font-family='system-ui,sans-serif' font-size='54' font-weight='600' fill='%237dd3fc' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+		<style>
+			:root {
+				--bg: #1b1f22;
+				--panel: rgba(27, 31, 34, 0.78);
+				--card: rgba(255, 255, 255, 0.035);
+				--card-hover: rgba(255, 255, 255, 0.065);
+				--line: rgba(255, 255, 255, 0.13);
+				--text: #e7e9ec;
+				--muted: #98a0aa;
+				--accent: #7dd3fc;
+				--accent-dim: rgba(125, 211, 252, 0.14);
+				--radius: 10px;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html {
+				-webkit-text-size-adjust: 100%;
+			}
+			body {
+				margin: 0;
+				min-height: 100vh;
+				background: #14171a;
+				color: var(--text);
+				font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+				font-size: 16px;
+				line-height: 1.75;
+				-webkit-font-smoothing: antialiased;
+			}
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0;
+				z-index: -1;
+				background: radial-gradient(1200px 600px at 20% -10%, rgba(125, 211, 252, 0.09), transparent 65%),
+					radial-gradient(900px 500px at 90% 110%, rgba(167, 139, 250, 0.07), transparent 60%), #14171a;
+			}
+			a {
+				color: var(--accent);
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+
+			.shell {
+				max-width: 880px;
+				margin: 0 auto;
+				padding: 48px 20px 72px;
+			}
+			.panel {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 40px 40px 44px;
+				backdrop-filter: blur(14px);
+				-webkit-backdrop-filter: blur(14px);
+				box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+			}
+
+			.back {
+				display: inline-block;
+				font-size: 0.78rem;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--muted);
+				margin-bottom: 28px;
+			}
+			.back:hover {
+				color: var(--accent);
+				text-decoration: none;
+			}
+
+			h1 {
+				margin: 0 0 8px;
+				font-size: 2rem;
+				letter-spacing: -0.015em;
+				line-height: 1.25;
+			}
+			.tagline {
+				margin: 0 0 26px;
+				color: var(--muted);
+			}
+
+			.hero-img {
+				display: block;
+				width: 100%;
+				height: auto;
+				border-radius: 8px;
+				border: 1px solid var(--line);
+				margin: 0 0 12px;
+			}
+			.caption {
+				margin: 0 0 32px;
+				font-size: 0.8rem;
+				color: var(--muted);
+				text-align: center;
+			}
+
+			.download {
+				display: flex;
+				gap: 14px;
+				align-items: center;
+				flex-wrap: wrap;
+				padding: 18px 20px;
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				background: var(--accent-dim);
+				margin: 0 0 14px;
+			}
+			.download .info {
+				flex: 1 1 260px;
+				min-width: 0;
+			}
+			.download .label {
+				font-size: 0.72rem;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--muted);
+			}
+			.download .version {
+				font-size: 1.05rem;
+				font-weight: 600;
+				margin: 2px 0 0;
+				word-break: break-all;
+			}
+			.download .meta {
+				margin: 4px 0 0;
+				font-size: 0.84rem;
+				color: var(--muted);
+			}
+			.btn {
+				display: inline-block;
+				padding: 11px 22px;
+				border-radius: 6px;
+				border: 1px solid var(--accent);
+				background: var(--accent);
+				color: #0b1116;
+				font-weight: 600;
+				font-size: 0.9rem;
+				letter-spacing: 0.02em;
+				white-space: nowrap;
+			}
+			.btn:hover {
+				background: #a5e4ff;
+				text-decoration: none;
+			}
+			.btn.ghost {
+				background: transparent;
+				color: var(--text);
+				border-color: var(--line);
+			}
+			.btn.ghost:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+			}
+
+			h2 {
+				margin: 40px 0 16px;
+				font-size: 0.78rem;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: var(--muted);
+				font-weight: 600;
+			}
+			p {
+				margin: 0 0 14px;
+			}
+			ol,
+			ul {
+				margin: 0 0 16px;
+				padding-left: 22px;
+			}
+			li {
+				margin: 0 0 8px;
+			}
+			li::marker {
+				color: var(--muted);
+			}
+			code {
+				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+				font-size: 0.86em;
+				background: rgba(255, 255, 255, 0.07);
+				padding: 1px 6px;
+				border-radius: 4px;
+				word-break: break-all;
+			}
+
+			.note {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 16px;
+				color: var(--muted);
+				font-size: 0.92rem;
+				margin: 18px 0;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.9rem;
+				margin: 0 0 8px;
+			}
+			th,
+			td {
+				text-align: left;
+				padding: 9px 10px;
+				border-bottom: 1px solid var(--line);
+				vertical-align: top;
+			}
+			th {
+				color: var(--muted);
+				font-weight: 600;
+				font-size: 0.78rem;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+			td:first-child {
+				white-space: nowrap;
+			}
+
+			.foot {
+				margin-top: 36px;
+				padding-top: 20px;
+				border-top: 1px solid var(--line);
+				font-size: 0.82rem;
+				color: var(--muted);
+				display: flex;
+				justify-content: space-between;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			@media (max-width: 640px) {
+				.shell {
+					padding: 24px 12px 40px;
+				}
+				.panel {
+					padding: 26px 20px 30px;
+				}
+				h1 {
+					font-size: 1.55rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="shell">
+			<div class="panel">
+				<a class="back" href="index.html">← Zayia</a>
+
+				<h1>无名杀 iOS 版</h1>
+				<p class="tagline">
+					在 iPhone / iPad 上运行《无名杀》的原生客户端。产物是<strong>未签名 IPA</strong>，用自己的 Apple ID
+					签名安装即可，不需要上架 App Store，也不需要付费开发者账号。
+				</p>
+
+				<img class="hero-img" src="images/noname-ios.jpg" alt="无名杀 iOS 版在 iPhone 上的游戏画面" width="1280" height="590" />
+				<p class="caption">在 iPhone 横屏下运行的游戏画面</p>
+
+				<div class="download">
+					<div class="info">
+						<div class="label">最新构建</div>
+						<p class="version" id="version">未签名 IPA · full</p>
+						<p class="meta" id="meta">约 1.2 GB · 官方更新后由 GitHub Actions 自动构建</p>
+					</div>
+					<a
+						class="btn"
+						id="download-btn"
+						href="https://github.com/Zayia/noname-ios/releases/latest/download/noname-unsigned-full.ipa"
+						target="_blank"
+						rel="noopener"
+					>
+						下载 IPA
+					</a>
+				</div>
+				<p class="meta" style="font-size: 0.82rem; color: var(--muted); margin: 0 0 4px">
+					看不到版本号？直接去 <a href="https://github.com/Zayia/noname-ios/releases" target="_blank" rel="noopener">Releases 页面</a> 下载。
+					构建状态：
+					<a href="https://github.com/Zayia/noname-ios/actions/workflows/ios.yml" target="_blank" rel="noopener">
+						<img
+							src="https://github.com/Zayia/noname-ios/actions/workflows/ios.yml/badge.svg"
+							alt="Build status"
+							height="18"
+							style="vertical-align: -4px"
+						/>
+					</a>
+				</p>
+				<h2>为什么是「未签名」</h2>
+				<p>
+					iOS 上没法像安卓那样直接装一个 apk。苹果要求每个 App 都有有效签名，所以这里只提供编译好的
+					<strong>未签名</strong> IPA，由你在自己设备上用免费 Apple ID（或自有证书）重签一次。
+					这样做的好处是不需要 Apple 开发者账号，也不用经过 App Store 审核；代价是免费证书
+					<strong>7 天有效</strong>，到期重签即可。
+				</p>
+
+				<h2>安装步骤</h2>
+				<ol>
+					<li>下载上面的 IPA 到电脑（Windows / macOS 都行）。</li>
+					<li>
+						用 <a href="https://sideloadly.io/" target="_blank" rel="noopener">Sideloadly</a>（推荐）、
+						<a href="https://altstore.io/" target="_blank" rel="noopener">AltStore</a> 或轻松签 / ESign
+						这类工具，把 IPA 拖进去、填自己的 Apple ID、开始签名安装。
+					</li>
+					<li>
+						首次安装后到 <strong>设置 → 通用 → VPN 与设备管理</strong> 里信任你的证书，然后就能打开游戏。
+					</li>
+				</ol>
+				<div class="note">
+					掉签或 7 天过期后，<strong>重新签名覆盖安装</strong>即可，<strong>不要先删除 App</strong>——删掉会连同存档一起清空。
+					安装时保持 Bundle ID 不变，存档就能一直延续。
+				</div>
+
+				<h2>怎么做的</h2>
+				<p>
+					无名杀本体是纯 Web 应用，安卓端用 Capacitor 套了一层 WebView。iOS 端没有引入任何第三方依赖，
+					只用系统自带的 <code>WKWebView</code> + <code>Network.framework</code>：
+				</p>
+				<table>
+					<tr>
+						<th>能力</th>
+						<th>实现</th>
+					</tr>
+					<tr>
+						<td>承载</td>
+						<td>原生 <code>WKWebView</code></td>
+					</tr>
+					<tr>
+						<td>加载</td>
+						<td>内置本地 HTTP 服务 <code>127.0.0.1:19530</code>，等价于 PC 端的 noname-server</td>
+					</tr>
+					<tr>
+						<td>只读资源</td>
+						<td>App 包内 <code>Bundle/web</code></td>
+					</tr>
+					<tr>
+						<td>可写目录</td>
+						<td><code>Documents/Noname</code>（「文件」App 可见），同名文件覆盖内置资源</td>
+					</tr>
+					<tr>
+						<td>扩展 / 存档</td>
+						<td>复用游戏自带的 <code>@noname/fs</code> HTTP 接口，和安卓版玩法一致</td>
+					</tr>
+				</table>
+				<p>
+					为什么用本地 HTTP 而不是 <code>file://</code>：后者在 WKWebView 下 ES Module、<code>fetch</code>、
+					IndexedDB 都会受限，而游戏强依赖 IndexedDB 存档、以及 640MB 音频的 Range 请求。
+					用 <code>http://127.0.0.1</code> 就是一个正常 Web 源，行为与桌面浏览器一致。
+				</p>
+
+				<h2>装扩展</h2>
+				<p>和安卓一样，往游戏目录放文件就能加功能：</p>
+				<ul>
+					<li>游戏内：<strong>选项 → 扩展 → 获取扩展 → 导入扩展</strong>，选一个 zip 包即可；</li>
+					<li>
+						或者用「文件」App 把扩展文件夹放进 <code>我的 iPhone → 无名杀 → Noname/extension/</code>，
+						再打开 <strong>选项 → 通用 → 自动导入扩展</strong>。
+					</li>
+				</ul>
+
+				<h2>自动更新</h2>
+				<p>
+					官方仓库一有更新，GitHub Actions 每天自动重新构建并发布新版本：拉取官方 <code>main</code> →
+					叠加 iOS 客户端 → 编译 → 打包 → 发 Release。所以这里的 IPA 会一直跟着官方走，
+					版本号可以在游戏内 <strong>选项 → 其它 → 更新</strong> 里核对。
+				</p>
+
+				<div class="foot">
+					<span>源码：<a href="https://github.com/Zayia/noname-ios" target="_blank" rel="noopener">Zayia/noname-ios</a></span>
+					<span>GPL-3.0 · 与上游一致</span>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			(function () {
+				var versionEl = document.getElementById("version");
+				var metaEl = document.getElementById("meta");
+				var btn = document.getElementById("download-btn");
+				var REPO = "Zayia/noname-ios";
+
+				function formatSize(bytes) {
+					if (!bytes) return "";
+					var mb = bytes / 1024 / 1024;
+					return mb >= 1024 ? (mb / 1024).toFixed(2) + " GB" : mb.toFixed(0) + " MB";
+				}
+
+				fetch("https://api.github.com/repos/" + REPO + "/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+					.then(function (res) {
+						if (!res.ok) throw new Error("HTTP " + res.status);
+						return res.json();
+					})
+					.then(function (release) {
+						var ipa = (release.assets || []).filter(function (a) {
+							return /\.ipa$/i.test(a.name);
+						})[0];
+
+						versionEl.textContent = release.tag_name;
+						var parts = [];
+						if (ipa) {
+							parts.push(ipa.name);
+							parts.push(formatSize(ipa.size));
+						}
+						if (release.published_at) {
+							var d = new Date(release.published_at);
+							parts.push(
+								"构建于 " +
+									d.getFullYear() +
+									"-" +
+									String(d.getMonth() + 1).padStart(2, "0") +
+									"-" +
+									String(d.getDate()).padStart(2, "0")
+							);
+						}
+						metaEl.textContent = parts.join(" · ");
+
+						if (ipa) {
+							btn.href = ipa.browser_download_url;
+						} else {
+							btn.href = release.html_url;
+						}
+					})
+					.catch(function () {
+						// 拿不到版本信息（API 限流 / 离线）时保持默认文案：
+						// 下载按钮指向 releases/latest/download 这个稳定地址，不依赖 API
+						metaEl.textContent = "约 1.2 GB · 官方更新后由 GitHub Actions 自动构建";
+					});
+			})();
+		</script>
+	</body>
+</html>
